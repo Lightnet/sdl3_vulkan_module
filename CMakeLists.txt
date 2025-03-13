@@ -74,6 +74,7 @@ add_executable(${PROJECT_NAME}
     src/vsdl_mesh.cpp
     src/vsdl_pipeline.cpp
     src/vsdl_cleanup.cpp
+    src/vsdl_imgui.cpp
     ${VMA_SOURCE_DIR}/src/VmaUsage.cpp
     ${IMGUI_SOURCES}  # Add ImGui sources
 )
