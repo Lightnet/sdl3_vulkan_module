@@ -1,15 +1,15 @@
 #include "vsdl_renderer.h"
 #include "vsdl_imgui.h"
 #include "imgui.h"
-#include "imgui_impl_sdl3.h"    // Add this for ImGui_ImplSDL3_NewFrame
-#include "imgui_impl_vulkan.h"  // Add this for ImGui_ImplVulkan_NewFrame
+#include "imgui_impl_sdl3.h"
+#include "imgui_impl_vulkan.h"
 #include <SDL3/SDL_log.h>
 #include <stdexcept>
 
 void vsdl_render_loop(VSDL_Context& ctx) {
     VkCommandPoolCreateInfo poolInfo = {};
     poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    poolInfo.queueFamilyIndex = 0; // Assuming graphics queue is at index 0
+    poolInfo.queueFamilyIndex = ctx.graphicsQueueFamilyIndex; // Use the stored index
     poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     if (vkCreateCommandPool(ctx.device, &poolInfo, nullptr, &ctx.commandPool) != VK_SUCCESS) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to create command pool");
@@ -93,7 +93,7 @@ void vsdl_render_loop(VSDL_Context& ctx) {
         vkCmdBeginRenderPass(ctx.commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
         vkCmdBindPipeline(ctx.commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, ctx.graphicsPipeline);
         vkCmdDraw(ctx.commandBuffer, 3, 1, 0, 0); // Draw triangle
-        vsdl::imgui_render(ctx, ctx.commandBuffer); // Render ImGui (includes ImGui::Render())
+        vsdl::imgui_render(ctx, ctx.commandBuffer); // Render ImGui
         vkCmdEndRenderPass(ctx.commandBuffer);
 
         if (vkEndCommandBuffer(ctx.commandBuffer) != VK_SUCCESS) {

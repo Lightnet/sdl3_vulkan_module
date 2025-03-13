@@ -48,7 +48,7 @@ namespace vsdl {
         initInfo.Instance = ctx.instance;
         initInfo.PhysicalDevice = ctx.physicalDevice;
         initInfo.Device = ctx.device;
-        initInfo.QueueFamily = 0; // Assuming graphics queue family is 0
+        initInfo.QueueFamily = ctx.graphicsQueueFamilyIndex; // Use the stored index
         initInfo.Queue = ctx.graphicsQueue;
         initInfo.PipelineCache = VK_NULL_HANDLE;
         initInfo.DescriptorPool = ctx.imguiDescriptorPool;
@@ -66,7 +66,7 @@ namespace vsdl {
         // Upload fonts
         VkCommandPoolCreateInfo tempPoolInfo = {};
         tempPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-        tempPoolInfo.queueFamilyIndex = 0; // Assuming graphics queue family is 0
+        tempPoolInfo.queueFamilyIndex = ctx.graphicsQueueFamilyIndex; // Use the stored index
         tempPoolInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
         VkCommandPool tempCommandPool;
         if (vkCreateCommandPool(ctx.device, &tempPoolInfo, nullptr, &tempCommandPool) != VK_SUCCESS) {
